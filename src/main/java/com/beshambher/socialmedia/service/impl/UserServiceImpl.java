@@ -1,5 +1,7 @@
 package com.beshambher.socialmedia.service.impl;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -25,16 +27,17 @@ public class UserServiceImpl implements UserService {
 
 		if (user == null) {
 			Role defaultRole = roleRepository.findByName(Constant.Role.ROLE_USER.toString());
+			Map<String, Object> userAttributes = oauthUser.getAttributes();
 			user = new User();
 			user.setRole(defaultRole);
-			String firstName = (String) oauthUser.getAttribute("name");
+			String firstName = (String) userAttributes.get("name");
 			if (firstName.indexOf(' ') > 0) {
 				user.setLastName(firstName.substring(firstName.indexOf(' ') + 1));
 				firstName = firstName.substring(0, firstName.indexOf(' '));
 			}
 			user.setFirstName(firstName);
-			user.setEmail((String) oauthUser.getAttribute("email"));
-			user.setAvatar((String) oauthUser.getAttribute("avatar_url") + (String) oauthUser.getAttribute("picture"));
+			user.setEmail((String) userAttributes.get("email"));
+			user.setAvatar((String) userAttributes.getOrDefault("avatar_url", "") + (String) userAttributes.getOrDefault("picture", ""));
 			user = userRepository.save(user);
 		}
 
