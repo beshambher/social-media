@@ -44,6 +44,9 @@ public class User {
 	@Column(name = "avatar", nullable = true)
 	private String avatar;
 
+	@Column(name = "location", nullable = true)
+	private String location;
+
 	@CreationTimestamp
 	private Date createdAt;
 
