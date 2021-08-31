@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SessionUserResponse {
-	
-	private String id;
+
 	private String email;
 	private String avatar;
+	private String username;
 	private String location;
 	private String lastName;
 	private String firstName;
 	private String role;
 
 	public SessionUserResponse(CustomOAuth2User principal) {
-		this.id = principal.getId();
 		this.email = principal.getEmail();
 		this.avatar = principal.getAvatar();
+		this.username = principal.getUsername();
 		this.location = principal.getLocation();
 		this.lastName = principal.getLastName();
 		this.firstName = principal.getFirstName();
@@ -29,9 +29,9 @@ public class SessionUserResponse {
 	}
 
 	public SessionUserResponse(CustomOidcUser principal) {
-		this.id = principal.getId();
 		this.email = principal.getEmail();
 		this.avatar = principal.getAvatar();
+		this.username = principal.getUsername();
 		this.location = principal.getLocation();
 		this.lastName = principal.getLastName();
 		this.firstName = principal.getFirstName();

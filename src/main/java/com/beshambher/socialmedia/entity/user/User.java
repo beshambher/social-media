@@ -4,13 +4,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.beshambher.socialmedia.entity.authority.Role;
@@ -27,10 +25,8 @@ import lombok.Setter;
 public class User {
 
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid")
-	@Column(name = "id", length = 36)
-	private String id;
+	@Column(name = "username", length = 100, nullable = false, unique = true)
+	private String username;
 
 	@Column(name = "first_name", length = 20, nullable = false)
 	private String firstName;

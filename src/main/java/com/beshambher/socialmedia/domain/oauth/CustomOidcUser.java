@@ -19,10 +19,10 @@ import lombok.Setter;
 public class CustomOidcUser extends DefaultOidcUser {
 
 	private static final long serialVersionUID = 1L;
-	
-	private String id;
+
 	private String email;
 	private String avatar;
+	private String username;
 	private String location;
 	private String lastName;
 	private String firstName;
@@ -31,12 +31,12 @@ public class CustomOidcUser extends DefaultOidcUser {
 	private Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role);
 
 	public CustomOidcUser(User user, OidcUser oidcUser) {
-		super(oidcUser.getAuthorities(), oidcUser.getIdToken(), oidcUser.getUserInfo());		
-		this.id = user.getId();
+		super(oidcUser.getAuthorities(), oidcUser.getIdToken(), oidcUser.getUserInfo());
 		this.email = user.getEmail();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
 		this.avatar = user.getAvatar();
+		this.username = user.getUsername();
 		this.location = user.getLocation();
 		this.role = user.getRole().getName();
 		this.attributes = oidcUser.getAttributes();
