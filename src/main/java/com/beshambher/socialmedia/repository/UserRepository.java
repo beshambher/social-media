@@ -9,5 +9,7 @@ import com.beshambher.socialmedia.entity.user.User;
 public interface UserRepository extends CrudRepository<User, String> {
 
 	User findByEmail(String email);
+	
+	Long countByUsername(String username);
 
 }
