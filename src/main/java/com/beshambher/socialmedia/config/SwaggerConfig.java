@@ -26,10 +26,13 @@ public class SwaggerConfig {
 
 	@Value("${swagger.author.url}")
 	private String contactUrl;
+	
+	@Value("${swagger.host.url}")
+	private String host;
 
 	@Bean
 	public Docket productApi() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
+		return new Docket(DocumentationType.SWAGGER_2).host(host).select()
 				.apis(RequestHandlerSelectors.basePackage("com.beshambher.socialmedia.controller"))
 				.paths(PathSelectors.any()).build().apiInfo(metaData());
 	}
