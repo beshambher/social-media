@@ -1,7 +1,5 @@
 package com.beshambher.socialmedia.repository;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +11,9 @@ import com.beshambher.socialmedia.entity.post.Post;
 @Repository
 public interface PostRepository extends CrudRepository<Post, String> {
 
-	List<Post> findByUser(String username, Pageable pageable);
+	Page<Post> findByUsername(String username, Pageable pageable);
 
-	@Query("SELECT p FROM Post p LEFT JOIN p.user u where u.username=?1")
+	@Query(value = "SELECT * FROM Post p LEFT JOIN User_Friends uf ON (p.username=uf.user OR p.username=uf.friend) WHERE p.username=?1 OR uf.user=?1 OR uf.friend=?1", nativeQuery = true)
 	Page<Post> findByUserWithFriends(String username, Pageable pageable);
 
 }

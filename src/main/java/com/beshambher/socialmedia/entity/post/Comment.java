@@ -46,6 +46,9 @@ public class Comment {
 	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
 	private User user;
 
+	@Column(name = "username", insertable = false, updatable = false)
+	private String username;
+
 	@CreationTimestamp
 	private Date createdAt;
 
