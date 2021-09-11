@@ -20,21 +20,21 @@ public class SessionUserResponse {
 
 	public SessionUserResponse(CustomOAuth2User principal) {
 		this.email = principal.getEmail();
-		this.avatar = principal.getAvatar();
+		this.avatar = principal.getUser().getAvatar();
 		this.username = principal.getUsername();
-		this.location = principal.getLocation();
-		this.lastName = principal.getLastName();
-		this.firstName = principal.getFirstName();
+		this.location = principal.getUser().getLocation();
+		this.lastName = principal.getUser().getLastName();
+		this.firstName = principal.getUser().getFirstName();
 		this.role = principal.getRole();
 	}
 
 	public SessionUserResponse(CustomOidcUser principal) {
 		this.email = principal.getEmail();
-		this.avatar = principal.getAvatar();
+		this.avatar = principal.getUser().getAvatar();
 		this.username = principal.getUsername();
-		this.location = principal.getLocation();
-		this.lastName = principal.getLastName();
-		this.firstName = principal.getFirstName();
+		this.location = principal.getUser().getLocation();
+		this.lastName = principal.getUser().getLastName();
+		this.firstName = principal.getUser().getFirstName();
 		this.role = principal.getRole();
 	}
 

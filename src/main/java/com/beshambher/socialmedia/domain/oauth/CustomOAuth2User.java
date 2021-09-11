@@ -17,23 +17,17 @@ import lombok.Setter;
 @Setter
 public class CustomOAuth2User implements OAuth2User {
 
+	private User user;
 	private String email;
-	private String avatar;
 	private String username;
-	private String location;
-	private String lastName;
-	private String firstName;
 	private Map<String, Object> attributes;
 	private String role = Constant.Role.ROLE_USER.toString();
 	private Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role);
 
 	public CustomOAuth2User(User user, OAuth2User oAuth2User) {
+		this.user = user;
 		this.email = user.getEmail();
-		this.firstName = user.getFirstName();
-		this.lastName = user.getLastName();
-		this.avatar = user.getAvatar();
 		this.username = user.getUsername();
-		this.location = user.getLocation();
 		this.role = user.getRole().getName();
 		this.attributes = oAuth2User.getAttributes();
 		this.authorities = oAuth2User.getAuthorities();
@@ -51,7 +45,7 @@ public class CustomOAuth2User implements OAuth2User {
 
 	@Override
 	public String getName() {
-		return String.valueOf(attributes.get("id"));
+		return this.username;
 	}
 
 }

@@ -20,24 +20,18 @@ public class CustomOidcUser extends DefaultOidcUser {
 
 	private static final long serialVersionUID = 1L;
 
+	private User user;
 	private String email;
-	private String avatar;
 	private String username;
-	private String location;
-	private String lastName;
-	private String firstName;
 	private Map<String, Object> attributes;
 	private String role = Constant.Role.ROLE_USER.toString();
 	private Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role);
 
 	public CustomOidcUser(User user, OidcUser oidcUser) {
 		super(oidcUser.getAuthorities(), oidcUser.getIdToken(), oidcUser.getUserInfo());
+		this.user = user;
 		this.email = user.getEmail();
-		this.firstName = user.getFirstName();
-		this.lastName = user.getLastName();
-		this.avatar = user.getAvatar();
 		this.username = user.getUsername();
-		this.location = user.getLocation();
 		this.role = user.getRole().getName();
 		this.attributes = oidcUser.getAttributes();
 		this.authorities = oidcUser.getAuthorities();
@@ -45,7 +39,7 @@ public class CustomOidcUser extends DefaultOidcUser {
 
 	@Override
 	public String getName() {
-		return (String) attributes.get("name");
+		return this.username;
 	}
 
 	@Override
