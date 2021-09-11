@@ -5,13 +5,20 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.beshambher.socialmedia.constants.Constant;
 import com.beshambher.socialmedia.domain.oauth.CustomOAuth2User;
 import com.beshambher.socialmedia.domain.oauth.CustomOidcUser;
 import com.beshambher.socialmedia.domain.response.SessionUserResponse;
+import com.beshambher.socialmedia.domain.response.UserResponse;
 import com.beshambher.socialmedia.entity.authority.Role;
 import com.beshambher.socialmedia.entity.user.User;
 import com.beshambher.socialmedia.repository.RoleRepository;
@@ -69,6 +76,34 @@ public class UserServiceImpl implements UserService {
 			return new SessionUserResponse((CustomOidcUser) authenticationUser);
 		}
 		return new SessionUserResponse((CustomOAuth2User) authenticationUser);
+	}
+
+	@Override
+	public Page<UserResponse> getUserFriends(String orderBy, String sortBy, Integer page, Integer pageSize) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		return userRepository.getUserFriends(username, getPage(orderBy, sortBy, page, pageSize))
+				.map(u -> new UserResponse(u));
+	}
+
+	@Override
+	public Page<UserResponse> getFriendSuggestions(String orderBy, String sortBy, Integer page, Integer pageSize) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		return userRepository.getFriendSuggestions(username, getPage(orderBy, sortBy, page, pageSize))
+				.map(u -> new UserResponse(u));
+	}
+
+	private Pageable getPage(String orderBy, String sortBy, Integer page, Integer pageSize) {
+		if (page == null) {
+			page = 0;
+		}
+		if (pageSize == null) {
+			pageSize = 10;
+		}
+		if (!StringUtils.hasLength(orderBy)) {
+			orderBy = "first_name";
+		}
+		Direction direction = "desc".equals(sortBy) ? Direction.DESC : Direction.ASC;
+		return PageRequest.of(page, pageSize, direction, orderBy);
 	}
 
 }

@@ -1,17 +1,23 @@
 package com.beshambher.socialmedia.entity.user;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.beshambher.socialmedia.entity.authority.Role;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,7 +55,11 @@ public class User {
 	@UpdateTimestamp
 	private Date updatedAt;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	private Role role;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<UserFriends> friends = new HashSet<>();
 
 }
