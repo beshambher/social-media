@@ -23,6 +23,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	@Value("${server.auth.uri.redirect}")
 	private String redirectUri;
 
+	@Value("${server.auth.uri.origin}")
+	private String[] originUrls;
+
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
 	
@@ -61,7 +64,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedOrigins(Arrays.asList(redirectUri));
+		configuration.setAllowedOrigins(Arrays.asList(originUrls));
 		configuration.setAllowedMethods(Arrays.asList("*"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
