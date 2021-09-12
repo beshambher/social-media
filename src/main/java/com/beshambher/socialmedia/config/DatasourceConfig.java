@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnProperty(value = "DATABASE", havingValue = "heroku", matchIfMissing = false)
+@ConditionalOnProperty(value = "DATABASE_DIALECT", havingValue = "org.hibernate.dialect.PostgreSQLDialect", matchIfMissing = false)
 public class DatasourceConfig {
 
 	@Value("${DATABASE_URL:url}")
