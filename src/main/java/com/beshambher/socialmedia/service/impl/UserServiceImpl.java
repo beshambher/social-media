@@ -80,15 +80,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Page<UserResponse> getUserFriends(String orderBy, String sortBy, Integer page, Integer pageSize) {
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		return userRepository.getUserFriends(username, getPage(orderBy, sortBy, page, pageSize))
+		return userRepository.getUserFriends(getUsername(), getPage(orderBy, sortBy, page, pageSize))
 				.map(u -> new UserResponse(u));
 	}
 
 	@Override
 	public Page<UserResponse> getFriendSuggestions(String orderBy, String sortBy, Integer page, Integer pageSize) {
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		return userRepository.getFriendSuggestions(username, getPage(orderBy, sortBy, page, pageSize))
+		return userRepository.getFriendSuggestions(getUsername(), getPage(orderBy, sortBy, page, pageSize))
 				.map(u -> new UserResponse(u));
 	}
 

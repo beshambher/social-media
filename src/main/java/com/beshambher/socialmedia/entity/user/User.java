@@ -60,6 +60,6 @@ public class User {
 	private Role role;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<UserFriends> friends = new HashSet<>();
+	private Set<UserFriend> friends = new HashSet<>();
 
 }
