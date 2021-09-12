@@ -1,1 +1,0 @@
-web: java -jar target/social-media-0.0.1-SNAPSHOT.war
