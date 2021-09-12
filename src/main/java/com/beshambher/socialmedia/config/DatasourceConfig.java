@@ -21,7 +21,7 @@ public class DatasourceConfig {
 	@Bean
 	public DataSource dataSource() throws URISyntaxException {
 
-		DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+		DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
 		URI dbUri = new URI(envDBUrl);
 		String username = dbUri.getUserInfo().split(":")[0];
 		String password = dbUri.getUserInfo().split(":")[1];
@@ -34,4 +34,5 @@ public class DatasourceConfig {
 
 		return dataSourceBuilder.build();
 	}
+
 }

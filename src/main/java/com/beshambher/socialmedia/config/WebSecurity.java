@@ -4,18 +4,23 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.beshambher.socialmedia.service.oauth.CustomOidcUserDetailsService;
 import com.beshambher.socialmedia.service.oauth.CustomUserDetailsService;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -27,11 +32,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 	private String[] originUrls;
 
 	@Autowired
+	private UrlProperties whitelistUrls;
+
+	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
-	
+
 	@Autowired
 	private CustomOidcUserDetailsService customOidcUserDetailsService;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -39,7 +47,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 			.cors().and()
 		 	.csrf().disable()
 			.authorizeRequests(
-				a -> a.antMatchers("/", "/error", "/webjars/**")
+				a -> a.antMatchers(whitelistUrls.getWhitelist())
 				.permitAll().anyRequest().authenticated()
 			)
 			.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -59,7 +67,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		            .invalidateHttpSession(true)
 		    );
 	}
-	
+
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
@@ -71,5 +79,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-	
+
+	@Getter
+	@Setter
+	@Component
+	@ConfigurationProperties("server.url")
+	public class UrlProperties {
+
+	    private String[] whitelist;
+
+	}
+
 }
