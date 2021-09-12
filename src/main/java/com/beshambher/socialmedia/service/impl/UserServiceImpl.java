@@ -6,13 +6,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.beshambher.socialmedia.constants.Constant;
 import com.beshambher.socialmedia.domain.oauth.CustomOAuth2User;
@@ -21,7 +16,9 @@ import com.beshambher.socialmedia.domain.response.SessionUserResponse;
 import com.beshambher.socialmedia.domain.response.UserResponse;
 import com.beshambher.socialmedia.entity.authority.Role;
 import com.beshambher.socialmedia.entity.user.User;
+import com.beshambher.socialmedia.entity.user.UserFriend;
 import com.beshambher.socialmedia.repository.RoleRepository;
+import com.beshambher.socialmedia.repository.UserFriendRepository;
 import com.beshambher.socialmedia.repository.UserRepository;
 import com.beshambher.socialmedia.service.UserService;
 
@@ -30,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private UserFriendRepository userFriendsRepository;
 
 	@Autowired
 	private RoleRepository roleRepository;
@@ -90,18 +90,35 @@ public class UserServiceImpl implements UserService {
 				.map(u -> new UserResponse(u));
 	}
 
-	private Pageable getPage(String orderBy, String sortBy, Integer page, Integer pageSize) {
-		if (page == null) {
-			page = 0;
+	@Override
+	@Transactional
+	public void followUser(String username) {
+		User userToFollow = userRepository.findByUsername(username);
+		User loggedInUser = userRepository.findByUsername(getUsername());
+		UserFriend userFriend = userFriendsRepository.findByUserAndFriend(loggedInUser.getUsername(), username);
+		if (userFriend == null) {
+			userFriend = new UserFriend(loggedInUser, userToFollow);
+			userFriend = userFriendsRepository.save(userFriend);
 		}
-		if (pageSize == null) {
-			pageSize = 10;
+	}
+
+	@Override
+	@Transactional
+	public void unfollowUser(String username) {
+		UserFriend userFriend = userFriendsRepository.findByUserAndFriend(getUsername(), username);
+		if (userFriend != null) {
+			userFriendsRepository.delete(userFriend);
 		}
-		if (!StringUtils.hasLength(orderBy)) {
-			orderBy = "first_name";
-		}
-		Direction direction = "desc".equals(sortBy) ? Direction.DESC : Direction.ASC;
-		return PageRequest.of(page, pageSize, direction, orderBy);
+	}
+
+	@Override
+	public String defaultOrder() {
+		return "first_name";
+	}
+
+	@Override
+	public String defaultSort() {
+		return "asc";
 	}
 
 }

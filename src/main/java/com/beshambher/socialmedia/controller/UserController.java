@@ -2,14 +2,18 @@ package com.beshambher.socialmedia.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.beshambher.socialmedia.domain.response.SessionUserResponse;
 import com.beshambher.socialmedia.domain.response.UserResponse;
+import com.beshambher.socialmedia.entity.user.User;
 import com.beshambher.socialmedia.service.UserService;
 
 @RestController
@@ -36,4 +40,17 @@ public class UserController {
 			@RequestParam(required = false) Integer size) {
 		return userService.getFriendSuggestions(orderby, sortby, page, size);
 	}
+
+	@PutMapping("/user/{username}/follow")
+	public ResponseEntity<User> followUser(@PathVariable String username) {
+		userService.followUser(username);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("/user/{username}/unfollow")
+	public ResponseEntity<User> unfollowUser(@PathVariable String username) {
+		userService.unfollowUser(username);
+		return ResponseEntity.noContent().build();
+	}
+	
 }

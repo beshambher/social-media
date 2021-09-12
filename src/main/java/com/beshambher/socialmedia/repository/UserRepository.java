@@ -14,6 +14,8 @@ public interface UserRepository extends CrudRepository<User, String> {
 	@Query("SELECT u FROM User u JOIN FETCH u.role r WHERE u.email=?1")
 	User findByEmail(String email);
 
+	User findByUsername(String username);
+
 	Long countByUsername(String username);
 
 	@Query(value = "SELECT * FROM User u LEFT JOIN User_Friends uf ON (u.username=uf.user OR u.username=uf.friend) "

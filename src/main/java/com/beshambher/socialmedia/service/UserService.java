@@ -7,7 +7,7 @@ import com.beshambher.socialmedia.domain.response.SessionUserResponse;
 import com.beshambher.socialmedia.domain.response.UserResponse;
 import com.beshambher.socialmedia.entity.user.User;
 
-public interface UserService {
+public interface UserService extends BaseService {
 
 	public User processOAuthUser(OAuth2User authenticationUser);
 
@@ -16,5 +16,9 @@ public interface UserService {
 	public Page<UserResponse> getUserFriends(String orderBy, String sortBy, Integer page, Integer pageSize);
 
 	public Page<UserResponse> getFriendSuggestions(String orderby, String sortby, Integer page, Integer size);
+
+	public void followUser(String username);
+
+	public void unfollowUser(String username);
 
 }
