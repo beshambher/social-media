@@ -14,10 +14,11 @@ public abstract interface CrudService<T> extends BaseService {
 				: ((CustomOAuth2User) principal).getUser();
 	}
 
-	<E extends T> E create(E entity);
+	T create(T entity);
 
-	<E extends T> E update(E entity);
+	T update(T entity, String id) throws Exception;
 
-	void deleteById(String id);
+	void deleteById(String id) throws Exception;
 
+	T findById(String id) throws Exception;
 }

@@ -13,6 +13,8 @@ import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.repository.PostRepository;
 import com.beshambher.socialmedia.service.post.PostService;
 
+import javassist.NotFoundException;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -47,7 +49,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public <P extends Post> P create(P post) {
+	public Post create(Post post) {
 		post.setLikes(0);
 		post.setUser(getUser());
 		post.setCommentsCount(0);
@@ -55,13 +57,30 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public <P extends Post> P update(P post) {
-		return postRepository.save(post);
+	public Post update(Post post, String id) throws Exception {
+		Post updatedPost = findById(id);
+		updatedPost.setBody(post.getBody());
+		return postRepository.save(updatedPost);
 	}
 
 	@Override
-	public void deleteById(String id) {
-		postRepository.deleteById(id);
+	public void deleteById(String id) throws Exception {
+		Post post = findById(id);
+		postRepository.delete(post);
+	}
+
+	@Override
+	public Post findById(String id) throws Exception {
+		Post post = null;
+		if (isAdmin()) {
+			post = postRepository.findById(id).orElse(null);
+		} else {
+			post = postRepository.findByUsernameAndId(getUsername(), id);
+		}
+		if (post == null) {
+			throw new NotFoundException("Post not found with id: " + id);
+		}
+		return post;
 	}
 
 }
