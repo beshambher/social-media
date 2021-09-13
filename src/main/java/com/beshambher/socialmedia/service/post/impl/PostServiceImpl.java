@@ -1,5 +1,7 @@
 package com.beshambher.socialmedia.service.post.impl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -28,12 +30,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public Page<PostResponse> getPosts(String orderBy, String sortBy, Integer page, Integer pageSize) {
 		return postRepository.findByUsername(getUsername(), getPage(orderBy, sortBy, page, pageSize))
 				.map(p -> new PostResponse(p));
 	}
 
 	@Override
+	@Transactional
 	public Page<PostResponse> getPostsWithFriends(String orderBy, String sortBy, Integer page, Integer pageSize) {
 		if (!StringUtils.hasLength(orderBy)) {
 			orderBy = PostSorting.created_at.toString();

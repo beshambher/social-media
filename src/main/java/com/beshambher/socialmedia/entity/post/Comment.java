@@ -8,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -35,8 +34,7 @@ public class Comment {
 	@Column(name = "id", length = 50)
 	private String id;
 
-	@Lob
-	@Column(name = "comment", nullable = false)
+	@Column(name = "comment", length = 255, nullable = false)
 	private String comment;
 
 	@ManyToOne(fetch = FetchType.LAZY)
