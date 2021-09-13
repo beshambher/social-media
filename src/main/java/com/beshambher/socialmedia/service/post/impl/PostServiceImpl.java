@@ -10,7 +10,11 @@ import org.springframework.util.StringUtils;
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.PostResponse;
 import com.beshambher.socialmedia.entity.post.Post;
+import com.beshambher.socialmedia.entity.post.PostLike;
+import com.beshambher.socialmedia.entity.user.User;
+import com.beshambher.socialmedia.repository.PostLikeRepository;
 import com.beshambher.socialmedia.repository.PostRepository;
+import com.beshambher.socialmedia.repository.UserRepository;
 import com.beshambher.socialmedia.service.post.PostService;
 
 import javassist.NotFoundException;
@@ -20,6 +24,12 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private PostLikeRepository postLikeRepository;
 
 	@Override
 	public String defaultOrder() {
@@ -67,6 +77,27 @@ public class PostServiceImpl implements PostService {
 	public void deleteById(String id) throws Exception {
 		Post post = findById(id);
 		postRepository.delete(post);
+	}
+
+	@Override
+	public Post toggleLike(String id) throws Exception {
+		Post post = postRepository.findById(id).orElse(null);
+		if (post == null) {
+			throw new NotFoundException("Post not found with id: " + id);
+		}
+		PostLike postLike = postLikeRepository.findByUserAndPost(getUsername(), post.getId());
+		if (postLike == null) {
+			User loggedInUser = userRepository.findByUsername(getUsername());
+			postLike = new PostLike(loggedInUser, post);
+			postLike = postLikeRepository.save(postLike);
+			post.setLikes(post.getLikes() + 1);
+			post = postRepository.save(post);
+		} else {
+			postLikeRepository.delete(postLike);
+			post.setLikes(post.getLikes() - 1);
+			post = postRepository.save(post);
+		}
+		return post;
 	}
 
 	@Override

@@ -57,4 +57,10 @@ public class PostController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PutMapping("/posts/{id}/like")
+	public PostResponse likeUnlikePost(@PathVariable String id) throws Exception {
+		Post post = postService.toggleLike(id);
+		return new PostResponse(post);
+	}
+
 }
