@@ -14,4 +14,6 @@ public interface CommentRepository extends CrudRepository<Comment, String> {
 
 	Page<Comment> findByUser(String username, Pageable pageable);
 
+	Comment findByUserAndId(String username, String id);
+
 }
