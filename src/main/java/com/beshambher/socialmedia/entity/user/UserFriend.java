@@ -23,7 +23,7 @@ public class UserFriend {
 
 	@ManyToOne
 	@MapsId("user")
-	@JoinColumn(name = "user", referencedColumnName = "username", updatable = false)
+	@JoinColumn(name = "username", referencedColumnName = "username", updatable = false)
 	private User user;
 
 	@ManyToOne
