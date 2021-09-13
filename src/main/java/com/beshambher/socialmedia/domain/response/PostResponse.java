@@ -18,7 +18,7 @@ public class PostResponse implements Serializable {
 	private String body;
 	private Integer likes;
 	private Integer commentsCount;
-	private User user;
+	private UserResponse user;
 	private Date createdAt;
 	private Date updatedAt;
 
@@ -27,21 +27,9 @@ public class PostResponse implements Serializable {
 		this.body = post.getBody();
 		this.likes = post.getLikes();
 		this.commentsCount = post.getCommentsCount();
-		this.user = new User(post.getUser());
+		this.user = new UserResponse(post.getUser());
 		this.createdAt = post.getCreatedAt();
 		this.updatedAt = post.getUpdatedAt();
-	}
-
-	@Getter
-	private class User {
-
-		private String avatar;
-		private String username;
-
-		public User(com.beshambher.socialmedia.entity.user.User user) {
-			this.avatar = user.getAvatar();
-			this.username = user.getUsername();
-		}
 	}
 
 }

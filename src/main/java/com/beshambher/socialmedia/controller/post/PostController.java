@@ -3,8 +3,11 @@ package com.beshambher.socialmedia.controller.post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,9 +39,28 @@ public class PostController {
 	}
 
 	@PostMapping("/posts")
-	public ResponseEntity<Post> getPosts(@RequestBody(required = true) Post post) {
+	public ResponseEntity<Post> makePost(@RequestBody(required = true) Post post) {
 		post = postService.create(post);
 		return ResponseEntity.noContent().header("location", "/posts/" + post.getId()).build();
+	}
+
+	@PutMapping("/posts/{id}")
+	public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody(required = true) Post post)
+			throws Exception {
+		post = postService.update(post, id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/posts/{id}")
+	public ResponseEntity<Post> getPosts(@PathVariable String id) throws Exception {
+		postService.deleteById(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@PutMapping("/posts/{id}/like")
+	public PostResponse likeUnlikePost(@PathVariable String id) throws Exception {
+		Post post = postService.toggleLike(id);
+		return new PostResponse(post);
 	}
 
 }

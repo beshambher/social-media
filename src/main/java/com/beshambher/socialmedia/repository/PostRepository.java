@@ -13,7 +13,10 @@ public interface PostRepository extends CrudRepository<Post, String> {
 
 	Page<Post> findByUsername(String username, Pageable pageable);
 
-	@Query(value = "SELECT * FROM Post p LEFT JOIN User_Friends uf ON (p.username=uf.username OR p.username=uf.friend) WHERE p.username=?1 OR uf.username=?1", nativeQuery = true)
+	Post findByUsernameAndId(String username, String id);
+
+	@Query(value = "SELECT id, body, comments_count, created_at, likes, updated_at, p.username FROM Post p "
+			+ "LEFT JOIN User_Friends uf ON p.username=uf.friend WHERE p.username=?1 OR uf.username=?1 GROUP BY p.id", nativeQuery = true)
 	Page<Post> findByUserWithFriends(String username, Pageable pageable);
 
 }

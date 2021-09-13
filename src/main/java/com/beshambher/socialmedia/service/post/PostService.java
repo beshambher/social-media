@@ -12,4 +12,6 @@ public interface PostService extends CrudService<Post> {
 
 	public Page<PostResponse> getPostsWithFriends(String orderBy, String sortBy, Integer page, Integer pageSize);
 
+	public Post toggleLike(String id) throws Exception;
+
 }

@@ -5,9 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
+import com.beshambher.socialmedia.domain.response.CommentResponse;
 import com.beshambher.socialmedia.entity.post.Comment;
 import com.beshambher.socialmedia.repository.CommentRepository;
 import com.beshambher.socialmedia.service.post.CommentService;
+
+import javassist.NotFoundException;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -26,24 +29,49 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public Page<Comment> getCommentsByPost(String postID) {
-		return null;
+	public Page<CommentResponse> getCommentsByPost(String postId, String orderby, String sortby, Integer page,
+			Integer size) {
+		return commentRepository.findByPost(postId, getPage(orderby, sortby, page, size))
+				.map(c -> new CommentResponse(c));
 	}
 
 	@Override
-	public <C extends Comment> C create(C comment) {
+	public Page<CommentResponse> getUserComments(String orderby, String sortby, Integer page, Integer size) {
+		return commentRepository.findByUser(getUsername(), getPage(orderby, sortby, page, size))
+				.map(c -> new CommentResponse(c));
+	}
+
+	@Override
+	public Comment create(Comment comment) {
 		comment.setUser(getUser());
 		return commentRepository.save(comment);
 	}
 
 	@Override
-	public <C extends Comment> C update(C comment) {
-		return commentRepository.save(comment);
+	public Comment update(Comment comment, String id) throws Exception {
+		Comment updatedComment = findById(id);
+		comment.setComment(comment.getComment());
+		return commentRepository.save(updatedComment);
 	}
 
 	@Override
-	public void deleteById(String id) {
-		commentRepository.deleteById(id);
+	public void deleteById(String id) throws Exception {
+		Comment comment = findById(id);
+		commentRepository.delete(comment);
+	}
+
+	@Override
+	public Comment findById(String id) throws Exception {
+		Comment comment = null;
+		if (isAdmin()) {
+			comment = commentRepository.findById(id).orElse(null);
+		} else {
+			comment = commentRepository.findByUserAndId(getUsername(), id);
+		}
+		if (comment == null) {
+			throw new NotFoundException("Comment not found with id: " + id);
+		}
+		return comment;
 	}
 
 }

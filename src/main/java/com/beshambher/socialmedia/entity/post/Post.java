@@ -1,18 +1,19 @@
 package com.beshambher.socialmedia.entity.post;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -55,9 +56,8 @@ public class Post {
 	@Column(name = "username", insertable = false, updatable = false, nullable = false)
 	private String username;
 
-	@ManyToMany
-	@JoinTable(name = "post_likes", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "username"))
-	List<User> postLikes;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+	private Set<PostLike> postLikes = new HashSet<>();
 
 	@CreationTimestamp
 	private Date createdAt;

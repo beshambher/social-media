@@ -10,14 +10,26 @@ import org.springframework.util.StringUtils;
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.PostResponse;
 import com.beshambher.socialmedia.entity.post.Post;
+import com.beshambher.socialmedia.entity.post.PostLike;
+import com.beshambher.socialmedia.entity.user.User;
+import com.beshambher.socialmedia.repository.PostLikeRepository;
 import com.beshambher.socialmedia.repository.PostRepository;
+import com.beshambher.socialmedia.repository.UserRepository;
 import com.beshambher.socialmedia.service.post.PostService;
+
+import javassist.NotFoundException;
 
 @Service
 public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private PostLikeRepository postLikeRepository;
 
 	@Override
 	public String defaultOrder() {
@@ -47,7 +59,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public <P extends Post> P create(P post) {
+	public Post create(Post post) {
 		post.setLikes(0);
 		post.setUser(getUser());
 		post.setCommentsCount(0);
@@ -55,13 +67,51 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public <P extends Post> P update(P post) {
-		return postRepository.save(post);
+	public Post update(Post post, String id) throws Exception {
+		Post updatedPost = findById(id);
+		updatedPost.setBody(post.getBody());
+		return postRepository.save(updatedPost);
 	}
 
 	@Override
-	public void deleteById(String id) {
-		postRepository.deleteById(id);
+	public void deleteById(String id) throws Exception {
+		Post post = findById(id);
+		postRepository.delete(post);
+	}
+
+	@Override
+	public Post toggleLike(String id) throws Exception {
+		Post post = postRepository.findById(id).orElse(null);
+		if (post == null) {
+			throw new NotFoundException("Post not found with id: " + id);
+		}
+		PostLike postLike = postLikeRepository.findByUserAndPost(getUsername(), post.getId());
+		if (postLike == null) {
+			User loggedInUser = userRepository.findByUsername(getUsername());
+			postLike = new PostLike(loggedInUser, post);
+			postLike = postLikeRepository.save(postLike);
+			post.setLikes(post.getLikes() + 1);
+			post = postRepository.save(post);
+		} else {
+			postLikeRepository.delete(postLike);
+			post.setLikes(post.getLikes() - 1);
+			post = postRepository.save(post);
+		}
+		return post;
+	}
+
+	@Override
+	public Post findById(String id) throws Exception {
+		Post post = null;
+		if (isAdmin()) {
+			post = postRepository.findById(id).orElse(null);
+		} else {
+			post = postRepository.findByUsernameAndId(getUsername(), id);
+		}
+		if (post == null) {
+			throw new NotFoundException("Post not found with id: " + id);
+		}
+		return post;
 	}
 
 }
