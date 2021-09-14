@@ -21,7 +21,7 @@ public class CustomOAuth2User implements OAuth2User {
 	private String email;
 	private String username;
 	private Map<String, Object> attributes;
-	private String role = Constant.Role.ROLE_USER.toString();
+	private String role = Constant.Role.USER.toString();
 	private Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role);
 
 	public CustomOAuth2User(User user, OAuth2User oAuth2User) {
