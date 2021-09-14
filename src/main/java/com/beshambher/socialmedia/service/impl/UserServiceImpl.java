@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
 		if (user == null) {
 			Map<String, Object> userAttributes = oAuthUser.getAttributes();
-			Role defaultRole = roleRepository.findByName(Constant.Role.ROLE_USER.toString());
+			Role defaultRole = roleRepository.findByName(Constant.Role.USER.toString());
 			user = new User();
 			user.setRole(defaultRole);
 			String email = (String) userAttributes.get("email");

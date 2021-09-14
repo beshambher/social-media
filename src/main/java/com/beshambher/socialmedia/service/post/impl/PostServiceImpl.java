@@ -59,6 +59,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public Post create(Post post) {
 		post.setLikes(0);
 		post.setUser(getUser());
@@ -67,6 +68,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public Post update(Post post, String id) throws Exception {
 		Post updatedPost = findById(id);
 		updatedPost.setBody(post.getBody());
@@ -74,12 +76,14 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(String id) throws Exception {
 		Post post = findById(id);
 		postRepository.delete(post);
 	}
 
 	@Override
+	@Transactional
 	public Post toggleLike(String id) throws Exception {
 		Post post = postRepository.findById(id).orElse(null);
 		if (post == null) {
