@@ -2,6 +2,7 @@ package com.beshambher.socialmedia.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface CommentRepository extends CrudRepository<Comment, String> {
 
 	Comment findByUserAndId(String username, String id);
 
+	@Modifying
+	@Query("DELETE FROM Comment c WHERE c.post.id=?1")
+	void deleteByPost(String postId);
 }
