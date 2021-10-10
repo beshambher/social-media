@@ -39,7 +39,7 @@ public class CommentController {
 	}
 
 	@PostMapping("/comments")
-	public ResponseEntity<Comment> makeComment(@RequestBody(required = true) Comment comment) {
+	public ResponseEntity<Comment> makeComment(@RequestBody(required = true) Comment comment) throws Exception {
 		comment = commentService.create(comment);
 		return ResponseEntity.noContent().header("location", "/comments/" + comment.getId()).build();
 	}

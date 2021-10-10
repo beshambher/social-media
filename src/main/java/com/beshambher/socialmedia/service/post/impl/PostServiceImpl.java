@@ -11,10 +11,8 @@ import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.PostResponse;
 import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.entity.post.PostLike;
-import com.beshambher.socialmedia.entity.user.User;
 import com.beshambher.socialmedia.repository.PostLikeRepository;
 import com.beshambher.socialmedia.repository.PostRepository;
-import com.beshambher.socialmedia.repository.UserRepository;
 import com.beshambher.socialmedia.service.post.PostService;
 
 import javassist.NotFoundException;
@@ -24,9 +22,6 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private PostRepository postRepository;
-
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private PostLikeRepository postLikeRepository;
@@ -91,8 +86,7 @@ public class PostServiceImpl implements PostService {
 		}
 		PostLike postLike = postLikeRepository.findByUserAndPost(getUsername(), post.getId());
 		if (postLike == null) {
-			User loggedInUser = userRepository.findByUsername(getUsername());
-			postLike = new PostLike(loggedInUser, post);
+			postLike = new PostLike(getUser(), post);
 			postLike = postLikeRepository.save(postLike);
 			post.setLikes(post.getLikes() + 1);
 			post = postRepository.save(post);

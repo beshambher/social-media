@@ -14,6 +14,7 @@ import com.beshambher.socialmedia.constants.Constant.Client;
 import com.beshambher.socialmedia.constants.Constant.Role;
 import com.beshambher.socialmedia.domain.oauth.CustomOAuth2User;
 import com.beshambher.socialmedia.domain.oauth.CustomOidcUser;
+import com.beshambher.socialmedia.entity.user.User;
 
 public interface BaseService {
 
@@ -40,6 +41,12 @@ public interface BaseService {
 
 	default String getUsername() {
 		return SecurityContextHolder.getContext().getAuthentication().getName();
+	}
+
+	default User getUser() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return principal instanceof CustomOidcUser ? ((CustomOidcUser) principal).getUser()
+				: ((CustomOAuth2User) principal).getUser();
 	}
 
 	default String getRole() {

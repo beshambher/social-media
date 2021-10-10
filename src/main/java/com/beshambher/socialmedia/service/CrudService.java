@@ -1,20 +1,8 @@
 package com.beshambher.socialmedia.service;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-
-import com.beshambher.socialmedia.domain.oauth.CustomOAuth2User;
-import com.beshambher.socialmedia.domain.oauth.CustomOidcUser;
-import com.beshambher.socialmedia.entity.user.User;
-
 public abstract interface CrudService<T> extends BaseService {
 
-	default User getUser() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return principal instanceof CustomOidcUser ? ((CustomOidcUser) principal).getUser()
-				: ((CustomOAuth2User) principal).getUser();
-	}
-
-	T create(T entity);
+	T create(T entity) throws Exception;
 
 	T update(T entity, String id) throws Exception;
 
