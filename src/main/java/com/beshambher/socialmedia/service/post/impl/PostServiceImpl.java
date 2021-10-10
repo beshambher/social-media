@@ -11,6 +11,7 @@ import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.PostResponse;
 import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.entity.post.PostLike;
+import com.beshambher.socialmedia.repository.CommentRepository;
 import com.beshambher.socialmedia.repository.PostLikeRepository;
 import com.beshambher.socialmedia.repository.PostRepository;
 import com.beshambher.socialmedia.service.post.PostService;
@@ -22,6 +23,9 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private CommentRepository commentRepository;
 
 	@Autowired
 	private PostLikeRepository postLikeRepository;
@@ -74,6 +78,7 @@ public class PostServiceImpl implements PostService {
 	@Transactional
 	public void deleteById(String id) throws Exception {
 		Post post = findById(id);
+		commentRepository.deleteByPost(id);
 		postRepository.delete(post);
 	}
 
