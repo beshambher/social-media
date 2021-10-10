@@ -1,5 +1,7 @@
 package com.beshambher.socialmedia.service.post.impl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -47,12 +49,9 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	@Transactional
 	public Comment create(Comment comment) throws Exception {
-		String id = comment.getPost().getId();
-		Post post = postRepository.findById(id).orElse(null);
-		if (post == null) {
-			throw new NotFoundException("Post not found with id: " + id);
-		}
+		Post post = getPost(comment);
 		comment.setUser(getUser());
 		comment = commentRepository.save(comment);
 		post.setCommentsCount(post.getCommentsCount() + 1);
@@ -68,9 +67,13 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(String id) throws Exception {
 		Comment comment = findById(id);
+		Post post = getPost(comment);
 		commentRepository.delete(comment);
+		post.setCommentsCount(post.getCommentsCount() - 1);
+		post = postRepository.save(post);
 	}
 
 	@Override
@@ -85,6 +88,15 @@ public class CommentServiceImpl implements CommentService {
 			throw new NotFoundException("Comment not found with id: " + id);
 		}
 		return comment;
+	}
+
+	private Post getPost(Comment comment) throws Exception {
+		String id = comment.getPost().getId();
+		Post post = postRepository.findById(id).orElse(null);
+		if (post == null) {
+			throw new NotFoundException("Post not found with id: " + id);
+		}
+		return post;
 	}
 
 }
