@@ -79,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
 		if (isAdmin()) {
 			comment = commentRepository.findById(id).orElse(null);
 		} else {
-			comment = commentRepository.findByUserAndId(getUsername(), id);
+			comment = commentRepository.findByUserAndId(getUser(), id);
 		}
 		if (comment == null) {
 			throw new NotFoundException("Comment not found with id: " + id);

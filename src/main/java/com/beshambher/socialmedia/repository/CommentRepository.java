@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.beshambher.socialmedia.entity.post.Comment;
+import com.beshambher.socialmedia.entity.user.User;
 
 @Repository
 public interface CommentRepository extends CrudRepository<Comment, String> {
@@ -17,7 +18,7 @@ public interface CommentRepository extends CrudRepository<Comment, String> {
 
 	Page<Comment> findByUser(String username, Pageable pageable);
 
-	Comment findByUserAndId(String username, String id);
+	Comment findByUserAndId(User user, String id);
 
 	@Modifying
 	@Query("DELETE FROM Comment c WHERE c.post.id=?1")
