@@ -93,8 +93,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void followUser(String username) {
+		User loggedInUser = getUser();
 		User userToFollow = userRepository.findByUsername(username);
-		User loggedInUser = userRepository.findByUsername(getUsername());
 		UserFriend userFriend = userFriendsRepository.findByUserAndFriend(loggedInUser.getUsername(), username);
 		if (userFriend == null) {
 			userFriend = new UserFriend(loggedInUser, userToFollow);

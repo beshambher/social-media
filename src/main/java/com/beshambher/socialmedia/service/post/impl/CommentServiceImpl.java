@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.CommentResponse;
 import com.beshambher.socialmedia.entity.post.Comment;
+import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.repository.CommentRepository;
+import com.beshambher.socialmedia.repository.PostRepository;
 import com.beshambher.socialmedia.service.post.CommentService;
 
 import javassist.NotFoundException;
@@ -17,6 +19,9 @@ public class CommentServiceImpl implements CommentService {
 
 	@Autowired
 	private CommentRepository commentRepository;
+
+	@Autowired
+	private PostRepository postRepository;
 
 	@Override
 	public String defaultOrder() {
@@ -42,9 +47,17 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public Comment create(Comment comment) {
+	public Comment create(Comment comment) throws Exception {
+		String id = comment.getPost().getId();
+		Post post = postRepository.findById(id).orElse(null);
+		if (post == null) {
+			throw new NotFoundException("Post not found with id: " + id);
+		}
 		comment.setUser(getUser());
-		return commentRepository.save(comment);
+		comment = commentRepository.save(comment);
+		post.setCommentsCount(post.getCommentsCount() + 1);
+		post = postRepository.save(post);
+		return comment;
 	}
 
 	@Override

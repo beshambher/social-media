@@ -39,7 +39,7 @@ public class PostController {
 	}
 
 	@PostMapping("/posts")
-	public ResponseEntity<Post> makePost(@RequestBody(required = true) Post post) {
+	public ResponseEntity<Post> makePost(@RequestBody(required = true) Post post) throws Exception {
 		post = postService.create(post);
 		return ResponseEntity.noContent().header("location", "/posts/" + post.getId()).build();
 	}
