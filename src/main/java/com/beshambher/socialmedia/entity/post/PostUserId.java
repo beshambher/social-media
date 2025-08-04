@@ -1,8 +1,7 @@
 package com.beshambher.socialmedia.entity.post;
 
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-
-import javax.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

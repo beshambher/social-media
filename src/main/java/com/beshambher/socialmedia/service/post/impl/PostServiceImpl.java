@@ -1,14 +1,8 @@
 package com.beshambher.socialmedia.service.post.impl;
 
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.PostResponse;
+import com.beshambher.socialmedia.exception.NotFoundException;
 import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.entity.post.PostLike;
 import com.beshambher.socialmedia.repository.CommentRepository;
@@ -16,7 +10,12 @@ import com.beshambher.socialmedia.repository.PostLikeRepository;
 import com.beshambher.socialmedia.repository.PostRepository;
 import com.beshambher.socialmedia.service.post.PostService;
 
-import javassist.NotFoundException;
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class PostServiceImpl implements PostService {

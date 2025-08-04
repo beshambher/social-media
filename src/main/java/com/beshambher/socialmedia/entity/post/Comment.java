@@ -1,25 +1,24 @@
 package com.beshambher.socialmedia.entity.post;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import com.beshambher.socialmedia.entity.user.User;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.UuidGenerator;
 
 @Getter
 @Setter
@@ -28,29 +27,28 @@ import lombok.Setter;
 @Table(name = "comment")
 public class Comment {
 
-	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid")
-	@Column(name = "id", length = 50)
-	private String id;
+    @Id
+    @UuidGenerator
+    @Column(name = "id", length = 36)
+    private String id;
 
-	@Column(name = "comment", length = 255, nullable = false)
-	private String comment;
+    @Column(name = "comment", length = 255, nullable = false)
+    private String comment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Post post;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    private User user;
 
-	@Column(name = "username", insertable = false, updatable = false)
-	private String username;
+    @Column(name = "username", insertable = false, updatable = false)
+    private String username;
 
-	@CreationTimestamp
-	private Date createdAt;
+    @CreationTimestamp
+    private Date createdAt;
 
-	@UpdateTimestamp
-	private Date updatedAt;
+    @UpdateTimestamp
+    private Date updatedAt;
 
 }

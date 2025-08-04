@@ -1,20 +1,19 @@
 package com.beshambher.socialmedia.service.post.impl;
 
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
 import com.beshambher.socialmedia.domain.response.CommentResponse;
 import com.beshambher.socialmedia.entity.post.Comment;
 import com.beshambher.socialmedia.entity.post.Post;
+import com.beshambher.socialmedia.exception.NotFoundException;
 import com.beshambher.socialmedia.repository.CommentRepository;
 import com.beshambher.socialmedia.repository.PostRepository;
 import com.beshambher.socialmedia.service.post.CommentService;
 
-import javassist.NotFoundException;
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CommentServiceImpl implements CommentService {

@@ -1,7 +1,7 @@
 # social-media
 
-Backend for [social media](https://social-media-beshambher.herokuapp.com/) in Java 8 Spring Boot using OAuth2.0
+Backend for [social media](https://social-media-beshambher.herokuapp.com/) in Java 17 Spring Boot v3 using OAuth2.0
 
-Project demo URL: https://social-media-beshambher.herokuapp.com/
+<strike>Project demo URL: https://social-media-beshambher.herokuapp.com/ </strike>
 
 Swagger API documentaion URL: https://social-media-beshambher.herokuapp.com/swagger-ui/ (Authentication required)
