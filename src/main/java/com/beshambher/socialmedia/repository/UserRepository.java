@@ -18,10 +18,10 @@ public interface UserRepository extends CrudRepository<User, String> {
 
 	Long countByUsername(String username);
 
-	@Query(value = "SELECT * FROM Users u LEFT JOIN User_Friends uf ON u.username=uf.friend WHERE u.username!=?1 AND uf.username=?1", nativeQuery = true)
+	@Query(value = "SELECT u.* FROM users u LEFT JOIN user_friends uf ON u.username=uf.friend WHERE u.username!=?1 AND uf.username=?1", nativeQuery = true)
 	Page<User> getUserFriends(String username, Pageable pageable);
 
-	@Query(value = "SELECT * FROM Users u WHERE u.username NOT IN (SELECT uf.friend FROM User_Friends uf WHERE uf.username=?1) AND u.username!=?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM users u WHERE u.username NOT IN (SELECT uf.friend FROM user_friends uf WHERE uf.username=?1) AND u.username!=?1", nativeQuery = true)
 	Page<User> getFriendSuggestions(String username, Pageable page);
 
 }

@@ -15,8 +15,8 @@ public interface PostRepository extends CrudRepository<Post, String> {
 
 	Post findByUsernameAndId(String username, String id);
 
-	@Query(value = "SELECT id, body, comments_count, created_at, likes, updated_at, p.username FROM Post p "
-			+ "LEFT JOIN User_Friends uf ON p.username=uf.friend WHERE p.username=?1 OR uf.username=?1 GROUP BY p.id", nativeQuery = true)
+	@Query(value = "SELECT id, body, comments_count, created_at, likes, updated_at, p.username FROM post p "
+			+ "LEFT JOIN user_friends uf ON p.username=uf.friend WHERE p.username=?1 OR uf.username=?1 GROUP BY p.id", nativeQuery = true)
 	Page<Post> findByUserWithFriends(String username, Pageable pageable);
 
 }
