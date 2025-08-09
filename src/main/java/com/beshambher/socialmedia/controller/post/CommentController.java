@@ -1,5 +1,6 @@
 package com.beshambher.socialmedia.controller.post;
 
+import com.beshambher.socialmedia.dto.request.CommentRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CommentController {
 	@Autowired
 	private CommentService commentService;
 
-	@GetMapping("/post/{id}/comments")
+	@GetMapping("/posts/{id}/comments")
 	public Page<CommentResponse> getComments(@PathVariable String id, @RequestParam(required = false) String orderby,
 			@RequestParam(required = false) String sortby, @RequestParam(required = false) Integer page,
 			@RequestParam(required = false) Integer size) {
@@ -39,8 +40,8 @@ public class CommentController {
 	}
 
 	@PostMapping("/comments")
-	public ResponseEntity<Comment> makeComment(@RequestBody Comment comment) throws Exception {
-		comment = commentService.create(comment);
+	public ResponseEntity<Comment> createComment(@RequestBody CommentRequest commentRequest) {
+		var comment = commentService.addComment(commentRequest);
 		return ResponseEntity.noContent().header("location", "/comments/" + comment.getId()).build();
 	}
 

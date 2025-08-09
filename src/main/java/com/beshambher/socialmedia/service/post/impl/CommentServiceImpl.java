@@ -1,6 +1,7 @@
 package com.beshambher.socialmedia.service.post.impl;
 
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
+import com.beshambher.socialmedia.dto.request.CommentRequest;
 import com.beshambher.socialmedia.dto.response.CommentResponse;
 import com.beshambher.socialmedia.entity.post.Comment;
 import com.beshambher.socialmedia.entity.post.Post;
@@ -49,13 +50,22 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional
-	public Comment create(Comment comment) throws Exception {
-		Post post = getPost(comment);
+	public Comment addComment(CommentRequest commentRequest) {
+		Post post = getPostById(commentRequest.postId());
+		Comment comment = new Comment();
+		comment.setComment(commentRequest.comment());
 		comment.setUser(getUser());
-		comment = commentRepository.save(comment);
+		comment.setPost(post);
+		comment = create(comment);
 		post.setCommentsCount(post.getCommentsCount() + 1);
 		postRepository.save(post);
 		return comment;
+	}
+
+	@Override
+	@Transactional
+	public Comment create(Comment comment) {
+		return commentRepository.save(comment);
 	}
 
 	@Override
@@ -69,7 +79,7 @@ public class CommentServiceImpl implements CommentService {
 	@Transactional
 	public void deleteById(String id) {
 		Comment comment = findById(id);
-		Post post = getPost(comment);
+		Post post = getPostByComment(comment);
 		commentRepository.delete(comment);
 		post.setCommentsCount(post.getCommentsCount() - 1);
 		postRepository.save(post);
@@ -89,8 +99,12 @@ public class CommentServiceImpl implements CommentService {
 		return comment;
 	}
 
-	private Post getPost(Comment comment) throws NotFoundException {
+	private Post getPostByComment(Comment comment) throws NotFoundException {
 		String id = comment.getPost().getId();
+		return getPostById(id);
+	}
+
+	private Post getPostById(String id) throws NotFoundException {
 		Post post = postRepository.findById(id).orElse(null);
 		if (post == null) {
 			throw new NotFoundException("Post not found with id: " + id);
