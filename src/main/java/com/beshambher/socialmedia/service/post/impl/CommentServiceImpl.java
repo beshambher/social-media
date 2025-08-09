@@ -38,13 +38,13 @@ public class CommentServiceImpl implements CommentService {
 	public Page<CommentResponse> getCommentsByPost(String postId, String orderby, String sortby, Integer page,
 			Integer size) {
 		return commentRepository.findByPost(postId, getPage(orderby, sortby, page, size))
-				.map(c -> new CommentResponse(c));
+				.map(CommentResponse::new);
 	}
 
 	@Override
 	public Page<CommentResponse> getUserComments(String orderby, String sortby, Integer page, Integer size) {
 		return commentRepository.findByUser(getUsername(), getPage(orderby, sortby, page, size))
-				.map(c -> new CommentResponse(c));
+				.map(CommentResponse::new);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
 		comment.setUser(getUser());
 		comment = commentRepository.save(comment);
 		post.setCommentsCount(post.getCommentsCount() + 1);
-		post = postRepository.save(post);
+		postRepository.save(post);
 		return comment;
 	}
 
@@ -67,17 +67,17 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional
-	public void deleteById(String id) throws Exception {
+	public void deleteById(String id) {
 		Comment comment = findById(id);
 		Post post = getPost(comment);
 		commentRepository.delete(comment);
 		post.setCommentsCount(post.getCommentsCount() - 1);
-		post = postRepository.save(post);
+		postRepository.save(post);
 	}
 
 	@Override
-	public Comment findById(String id) throws Exception {
-		Comment comment = null;
+	public Comment findById(String id) throws NotFoundException {
+		Comment comment;
 		if (isAdmin()) {
 			comment = commentRepository.findById(id).orElse(null);
 		} else {
@@ -89,7 +89,7 @@ public class CommentServiceImpl implements CommentService {
 		return comment;
 	}
 
-	private Post getPost(Comment comment) throws Exception {
+	private Post getPost(Comment comment) throws NotFoundException {
 		String id = comment.getPost().getId();
 		Post post = postRepository.findById(id).orElse(null);
 		if (post == null) {
@@ -97,5 +97,4 @@ public class CommentServiceImpl implements CommentService {
 		}
 		return post;
 	}
-
 }

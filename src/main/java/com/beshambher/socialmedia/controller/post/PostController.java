@@ -39,20 +39,20 @@ public class PostController {
 	}
 
 	@PostMapping("/posts")
-	public ResponseEntity<Post> makePost(@RequestBody(required = true) Post post) throws Exception {
+	public ResponseEntity<Post> createPost(@RequestBody Post post) throws Exception {
 		post = postService.create(post);
 		return ResponseEntity.noContent().header("location", "/posts/" + post.getId()).build();
 	}
 
 	@PutMapping("/posts/{id}")
-	public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody(required = true) Post post)
+	public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post post)
 			throws Exception {
-		post = postService.update(post, id);
+		postService.update(post, id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/posts/{id}")
-	public ResponseEntity<Post> getPosts(@PathVariable String id) throws Exception {
+	public ResponseEntity<Post> deletePost(@PathVariable String id) throws Exception {
 		postService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -62,5 +62,4 @@ public class PostController {
 		Post post = postService.toggleLike(id);
 		return new PostResponse(post);
 	}
-
 }

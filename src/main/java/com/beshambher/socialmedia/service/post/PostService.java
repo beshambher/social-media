@@ -8,10 +8,10 @@ import com.beshambher.socialmedia.service.CrudService;
 
 public interface PostService extends CrudService<Post> {
 
-	public Page<PostResponse> getPosts(String orderBy, String sortBy, Integer page, Integer pageSize);
+	Page<PostResponse> getPosts(String orderBy, String sortBy, Integer page, Integer pageSize);
 
-	public Page<PostResponse> getPostsWithFriends(String orderBy, String sortBy, Integer page, Integer pageSize);
+	Page<PostResponse> getPostsWithFriends(String orderBy, String sortBy, Integer page, Integer pageSize);
 
-	public Post toggleLike(String id) throws Exception;
+	Post toggleLike(String id) throws Exception;
 
 }

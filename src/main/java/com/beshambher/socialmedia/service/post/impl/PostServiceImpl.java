@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 	@Transactional
 	public Page<PostResponse> getPosts(String orderBy, String sortBy, Integer page, Integer pageSize) {
 		return postRepository.findByUsername(getUsername(), getPage(orderBy, sortBy, page, pageSize))
-				.map(p -> new PostResponse(p));
+				.map(PostResponse::new);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class PostServiceImpl implements PostService {
 			orderBy = PostSorting.created_at.toString();
 		}
 		return postRepository.findByUserWithFriends(getUsername(), getPage(orderBy, sortBy, page, pageSize))
-				.map(p -> new PostResponse(p));
+				.map(PostResponse::new);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public void deleteById(String id) throws Exception {
+	public void deleteById(String id) {
 		Post post = findById(id);
 		commentRepository.deleteByPost(id);
 		postRepository.delete(post);
@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public Post toggleLike(String id) throws Exception {
+	public Post toggleLike(String id) throws NotFoundException {
 		Post post = postRepository.findById(id).orElse(null);
 		if (post == null) {
 			throw new NotFoundException("Post not found with id: " + id);
@@ -91,7 +91,7 @@ public class PostServiceImpl implements PostService {
 		PostLike postLike = postLikeRepository.findByUserAndPost(getUsername(), post.getId());
 		if (postLike == null) {
 			postLike = new PostLike(getUser(), post);
-			postLike = postLikeRepository.save(postLike);
+			postLikeRepository.save(postLike);
 			post.setLikes(post.getLikes() + 1);
 			post = postRepository.save(post);
 		} else {
@@ -103,8 +103,8 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Post findById(String id) throws Exception {
-		Post post = null;
+	public Post findById(String id) throws NotFoundException {
+		Post post;
 		if (isAdmin()) {
 			post = postRepository.findById(id).orElse(null);
 		} else {
@@ -115,5 +115,4 @@ public class PostServiceImpl implements PostService {
 		}
 		return post;
 	}
-
 }

@@ -39,22 +39,21 @@ public class CommentController {
 	}
 
 	@PostMapping("/comments")
-	public ResponseEntity<Comment> makeComment(@RequestBody(required = true) Comment comment) throws Exception {
+	public ResponseEntity<Comment> makeComment(@RequestBody Comment comment) throws Exception {
 		comment = commentService.create(comment);
 		return ResponseEntity.noContent().header("location", "/comments/" + comment.getId()).build();
 	}
 
 	@PutMapping("/comments/{id}")
-	public ResponseEntity<Comment> updateComment(@PathVariable String id, @RequestBody(required = true) Comment comment)
+	public ResponseEntity<Comment> updateComment(@PathVariable String id, @RequestBody Comment comment)
 			throws Exception {
-		comment = commentService.update(comment, id);
+		commentService.update(comment, id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/comments/{id}")
-	public ResponseEntity<Comment> getComments(@PathVariable String id) throws Exception {
+	public ResponseEntity<Comment> deleteComment(@PathVariable String id) throws Exception {
 		commentService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
-
 }

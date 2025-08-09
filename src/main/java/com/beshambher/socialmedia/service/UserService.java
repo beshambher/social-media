@@ -9,16 +9,16 @@ import com.beshambher.socialmedia.entity.user.User;
 
 public interface UserService extends BaseService {
 
-	public User processOAuthUser(OAuth2User authenticationUser);
+	User processOAuthUser(OAuth2User authenticationUser);
 
-	public SessionUserResponse getSessionUser(OAuth2User authenticationUser);
+	SessionUserResponse getSessionUser(OAuth2User authenticationUser);
 
-	public Page<UserResponse> getUserFriends(String orderBy, String sortBy, Integer page, Integer pageSize);
+	Page<UserResponse> getUserFriends(String orderBy, String sortBy, Integer page, Integer pageSize);
 
-	public Page<UserResponse> getFriendSuggestions(String orderby, String sortby, Integer page, Integer size);
+	Page<UserResponse> getFriendSuggestions(String orderby, String sortby, Integer page, Integer size);
 
-	public void followUser(String username);
+	void followUser(String username);
 
-	public void unfollowUser(String username);
+	void unfollowUser(String username);
 
 }

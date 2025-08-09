@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User processOAuthUser(OAuth2User oAuthUser) {
-		User user = userRepository.findByEmail((String) oAuthUser.getAttribute("email"));
+		User user = userRepository.findByEmail(oAuthUser.getAttribute("email"));
 
 		if (user == null) {
 			Map<String, Object> userAttributes = oAuthUser.getAttributes();
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 			}
 			user.setFirstName(firstName);
 			user.setLocation((String) userAttributes.get("location"));
-			user.setAvatar((String) userAttributes.getOrDefault("avatar_url", "")
+			user.setAvatar(userAttributes.getOrDefault("avatar_url", "")
 					+ (String) userAttributes.getOrDefault("picture", ""));
 			user = userRepository.save(user);
 		}
@@ -80,13 +80,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Page<UserResponse> getUserFriends(String orderBy, String sortBy, Integer page, Integer pageSize) {
 		return userRepository.getUserFriends(getUsername(), getPage(orderBy, sortBy, page, pageSize))
-				.map(u -> new UserResponse(u));
+				.map(UserResponse::new);
 	}
 
 	@Override
 	public Page<UserResponse> getFriendSuggestions(String orderBy, String sortBy, Integer page, Integer pageSize) {
 		return userRepository.getFriendSuggestions(getUsername(), getPage(orderBy, sortBy, page, pageSize))
-				.map(u -> new UserResponse(u));
+				.map(UserResponse::new);
 	}
 
 	@Override
@@ -119,5 +119,4 @@ public class UserServiceImpl implements UserService {
 	public String defaultSort() {
 		return "asc";
 	}
-
 }
