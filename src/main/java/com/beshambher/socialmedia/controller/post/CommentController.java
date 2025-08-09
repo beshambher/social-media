@@ -1,6 +1,7 @@
 package com.beshambher.socialmedia.controller.post;
 
 import com.beshambher.socialmedia.dto.request.CommentRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class CommentController {
 	}
 
 	@PostMapping("/comments")
-	public ResponseEntity<Comment> createComment(@RequestBody CommentRequest commentRequest) {
+	public ResponseEntity<Comment> createComment(@Valid @RequestBody CommentRequest commentRequest) {
 		var comment = commentService.addComment(commentRequest);
 		return ResponseEntity.noContent().header("location", "/comments/" + comment.getId()).build();
 	}
