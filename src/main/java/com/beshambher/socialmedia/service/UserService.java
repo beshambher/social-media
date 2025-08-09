@@ -3,8 +3,8 @@ package com.beshambher.socialmedia.service;
 import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import com.beshambher.socialmedia.domain.response.SessionUserResponse;
-import com.beshambher.socialmedia.domain.response.UserResponse;
+import com.beshambher.socialmedia.dto.response.SessionUserResponse;
+import com.beshambher.socialmedia.dto.response.UserResponse;
 import com.beshambher.socialmedia.entity.user.User;
 
 public interface UserService extends BaseService {

@@ -1,7 +1,7 @@
 package com.beshambher.socialmedia.service.post.impl;
 
 import com.beshambher.socialmedia.constants.sorting.PostSorting;
-import com.beshambher.socialmedia.domain.response.CommentResponse;
+import com.beshambher.socialmedia.dto.response.CommentResponse;
 import com.beshambher.socialmedia.entity.post.Comment;
 import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.exception.NotFoundException;

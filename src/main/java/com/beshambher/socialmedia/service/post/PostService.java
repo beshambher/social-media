@@ -2,7 +2,7 @@ package com.beshambher.socialmedia.service.post;
 
 import org.springframework.data.domain.Page;
 
-import com.beshambher.socialmedia.domain.response.PostResponse;
+import com.beshambher.socialmedia.dto.response.PostResponse;
 import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.service.CrudService;
 

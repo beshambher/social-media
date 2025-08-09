@@ -1,26 +1,22 @@
 package com.beshambher.socialmedia.domain.oauth;
 
-import java.util.Collection;
-import java.util.Map;
-
+import com.beshambher.socialmedia.constants.Constant;
+import com.beshambher.socialmedia.entity.user.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import com.beshambher.socialmedia.constants.Constant;
-import com.beshambher.socialmedia.entity.user.User;
-
-import lombok.Getter;
-import lombok.Setter;
+import java.util.Collection;
+import java.util.Map;
 
 @Getter
-@Setter
 public class CustomOAuth2User implements OAuth2User {
 
-	private User user;
-	private String email;
-	private String username;
-	private Map<String, Object> attributes;
+	private final User user;
+	private final String email;
+	private final String username;
+	private final Map<String, Object> attributes;
 	private String role = Constant.Role.USER.toString();
 	private Collection<? extends GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(role);
 
@@ -47,5 +43,4 @@ public class CustomOAuth2User implements OAuth2User {
 	public String getName() {
 		return this.username;
 	}
-
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beshambher.socialmedia.domain.response.PostResponse;
+import com.beshambher.socialmedia.dto.response.PostResponse;
 import com.beshambher.socialmedia.entity.post.Post;
 import com.beshambher.socialmedia.service.post.PostService;
 

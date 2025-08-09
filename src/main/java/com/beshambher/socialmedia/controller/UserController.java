@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.beshambher.socialmedia.domain.response.SessionUserResponse;
-import com.beshambher.socialmedia.domain.response.UserResponse;
+import com.beshambher.socialmedia.dto.response.SessionUserResponse;
+import com.beshambher.socialmedia.dto.response.UserResponse;
 import com.beshambher.socialmedia.entity.user.User;
 import com.beshambher.socialmedia.service.UserService;
 
