@@ -7,7 +7,7 @@ target/
 !**/src/test/**/target/
 
 # Environment file
-*.envlog
+*.env
 
 # Log file
 *.log
