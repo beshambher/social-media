@@ -6,6 +6,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Environment file
+*.envlog
+
 # Log file
 *.log
 logs/

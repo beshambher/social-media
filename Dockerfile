@@ -12,8 +12,7 @@ RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 RUN ls -l /app/target/
 
-WORKDIR /app
-COPY /target/*.war app.war
+COPY target/*.war app.war
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.war"]
