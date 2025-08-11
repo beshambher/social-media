@@ -12,7 +12,5 @@ RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 RUN ls -l /app/target/
 
-COPY /app/target/*.war app.war
-
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.war"]
+ENTRYPOINT ["java", "-jar", "/app/target/social-media-0.0.2-SNAPSHOT.war"]
